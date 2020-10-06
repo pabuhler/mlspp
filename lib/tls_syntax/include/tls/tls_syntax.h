@@ -331,12 +331,14 @@ struct vector
   template<typename T>
   static istream& decode(istream& str, std::vector<T>& data)
   {
+      uint64_t size = str._buffer.size();
+
     switch (head) {
-      case 0: // fallthrough
-      case 1: // fallthrough
-      case 2: // fallthrough
-      case 3: // fallthrough
-      case 4:
+      case 0: break;// fallthrough
+      case 1: {uint8_t s; str >> s; size = s;} break;// fallthrough
+      case 2: {uint16_t s; str >> s; size = s;} break;// fallthrough
+      case 3: break;// fallthrough
+      case 4: {uint32_t s; str >> s; size = s;}
         break;
       default:
         throw ReadError("Invalid header size");
@@ -344,10 +346,10 @@ struct vector
 
     // Read the size of the vector, if provided; otherwise consume all remaining
     // data in the buffer
-    uint64_t size = str._buffer.size();
-    if (head > 0) {
-      str.read_uint(size, head);
-    }
+    //uint64_t size = str._buffer.size();
+    //if (head > 0) {
+    //  str.read_uint(size, head);
+    //}
 
     // Check the size against the declared constraints
     if (size > str._buffer.size()) {
