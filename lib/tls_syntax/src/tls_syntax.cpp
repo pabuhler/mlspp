@@ -80,6 +80,10 @@ istream::read_uint(T& data, int length)
   return *this;
 }
 
+template class
+istream&
+istream::read_uint<uint64_t>(uint64_t& data, int length);
+
 istream&
 operator>>(istream& in, bool& data)
 {
